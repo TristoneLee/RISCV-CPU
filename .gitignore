@@ -4,3 +4,11 @@ riscv/testspace/*
 *.vcd
 
 !.keep
+riscv/src/Components/iCache.v.out
+.idea/modules.xml
+.idea/RISCV-CPU.iml
+.idea/vcs.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+.idea/edaphic/defines.xml
+.idea/.gitignore

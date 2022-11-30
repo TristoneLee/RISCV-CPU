@@ -1,5 +1,5 @@
 `include "ram.v"
-
+`include "def.v"
 
 module memController(
     //control signal
@@ -10,9 +10,9 @@ module memController(
 
     //with fetchBuffer
 
-    output reg[7:0] fetch_out,
-    input 
+    output reg[`MEM_WIDTH ] fetch_out
 );
+
     ram ram(
         .clk_in(clk_in),
 
