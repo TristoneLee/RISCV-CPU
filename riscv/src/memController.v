@@ -13,12 +13,12 @@ module memController #(parameter COMMAND_LENGTH = 21)
         output wire memCon2iCache_ifbusy,
         input wire iCache2memCon_valid,
         input wire [`ADDR_WIDTH] iCache2memCon_adderss,                   //with iCache
-        output reg[`WORD_WIDTH] memCon2LSB_return,
-        output wire memCon2LSB_ifbusy,
-        input wire[1:0] LSB2memCon_width,
-        input wire [`ADDR_BITS] LSB2memCon_addr,
-        input wire LSB 2memCon_rw,
-        input wire LSB2memCon_valid,                                      //with LSB
+        output reg[`WORD_WIDTH] memCon2lsu_return,
+        output reg memCon2lsu_enable,
+        input wire[1:0] lsu2memCon_width,
+        input wire [`ADDR_BITS] lsu2memCon_addr,
+        input wire lsu2memCon_rw,
+        input wire lsu2memCon_enable,                                      //with lsu
         input wire [`MEM_WIDTH] mem2memCon_din,
         output reg [`ADDR_WIDTH] memCon2mem_addr,
         output reg memCon2mem_rw_select,
@@ -57,7 +57,7 @@ always @(posedge clk_in)
               end
             else
               begin
-                memCon2LSB_return <= io_buffer;
+                memCon2lsu_return <= io_buffer;
                 io_buffer         <= 32'd0;
               end
             if (reserve_valid == 1'd1)
@@ -85,12 +85,12 @@ always @(posedge clk_in)
                     current_command[`RW_BIT]      <= 1'd0;
                     count_down                   <= 3'd4;
                   end
-                else if (LSB2memCon_valid == 1'd1)
+                else if (lsu2memCon_valid == 1'd1)
                   begin
-                    current_command[`ADDR_BITS]  <= LSB2memCon_addr;
-                    current_command[`WIDTH_BITS] <= LSB2memCon_width;
+                    current_command[`ADDR_BITS]  <= lsu2memCon_addr;
+                    current_command[`WIDTH_BITS] <= lsu2memCon_width;
                     current_command[`SRC_BIT]    <= 1'd1;
-                    current_command [`RW_BIT]     <= LSB2memCon_rw;
+                    current_command [`RW_BIT]     <= lsu2memCon_rw;
                   end
               end
           end
@@ -104,12 +104,12 @@ always @(posedge clk_in)
                 current_command[`RW_BIT]      <= 1'd0;
                 count_down                    <= 3'd4;
               end
-            else if (LSB2memCon_valid == 1'd1)
+            else if (lsu2memCon_valid == 1'd1)
               begin
-                current_command[`ADDR_BITS]  <= LSB2memCon_addr;
-                current_command[`WIDTH_BITS] <= LSB2memCon_width;
+                current_command[`ADDR_BITS]  <= lsu2memCon_addr;
+                current_command[`WIDTH_BITS] <= lsu2memCon_width;
                 current_command[`SRC_BIT]    <= 1'd1;
-                current_command [`RW_BIT]    <= LSB2memCon_rw;
+                current_command [`RW_BIT]    <= lsu2memCon_rw;
               end
             reserve_valid <= 1'd1;
           end
