@@ -5,14 +5,20 @@ module iCache #(parameter CACHE_SIZE = 1024,
                 parameter CACHELINE_SIZE = 32)
                (input wire clk_in,
                 input wire rst_in,
-                input wire rdy_in,                             //with systemController
+                input wire rdy_in,                             
+                //with systemController
+                
                 input wire [`ADDR_WIDTH]fetch2iCache_address,
                 input wire fetch2iCache_enable,
                 output reg [`INS_WIDTH] iCache2fetch_return,
-                output reg iCache2fetch_stall,                 //with fetchBuffer
+                output reg iCache2fetch_stall,                 
+                //with fetchBuffer
+                
                 output reg [`ADDR_WIDTH]iCache2memCon_address,
                 output reg iCache2memCon_enable,
-                input wire [`INS_WIDTH] memCon2iCache_return); //with memoryController
+                input wire [`INS_WIDTH] memCon2iCache_return
+                //with memoryController
+                ); 
     
     parameter LINE_COUNT   = CACHE_SIZE/CACHELINE_SIZE;
     parameter SET_COUNT    = LINE_COUNT/CACHE_SET_SIZE;

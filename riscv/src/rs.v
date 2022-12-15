@@ -6,8 +6,8 @@ module ReservationStation(
            input wire rdy_in,
            output wire rs_full,
 
-           input wire decoder2rs_dispatch_enable,
-           input wire[`RS_LINE_LENGTH-1:0] decoder2rs_dispatch_rsline,
+           input wire decoder2rs_enable,
+           input wire[`RS_LINE_LENGTH-1:0] decoder2rs_rsline,
 
            output reg rs2alu_enable,
            output reg[`DATA_WIDTH] rs2alu_rs1,
@@ -62,8 +62,8 @@ always @(posedge clk_in) begin
         end
     end
     else if(rdy_in) begin
-        if(decoder2rs_dispatch_enable&&!rs_full) begin
-            reservation_station[free_index]<=decoder2rs_dispatch_rsline;
+        if(decoder2rs_enable&&!rs_full) begin
+            reservation_station[free_index]<=decoder2rs_rsline;
         end
         if(ready_table!=`RS_ZERO) begin
             rs2alu_enable<=`TRUE;
@@ -77,7 +77,7 @@ always @(posedge clk_in) begin
         end
         if(alu2rs_bypass_enable) begin
             for(alu_i=1;alu_i<`RS_SIZE;i=i+1) begin
-                if(decoder2rs_dispatch_enable&&!rs_full&&alu_i==free_index) begin
+                if(decoder2rs_enable&&!rs_full&&alu_i==free_index) begin
                     if(reservation_station[alu_i][`RS_QJ]==alu2rs_bypass_reorder) begin
                         reservation_station[alu_i][`RS_VJ]<=alu2rs_bypass_value;
                         reservation_station[alu_i][`RS_READY_1]<=`TRUE;
@@ -101,7 +101,7 @@ always @(posedge clk_in) begin
         end
         if(lsu2rs_bypass_enable) begin
             for(lsu_i=1;lsu_i<`RS_SIZE;i=i+1) begin
-                if(decoder2rs_dispatch_enable&&!rs_full&&lsu_i==free_index) begin
+                if(decoder2rs_enable&&!rs_full&&lsu_i==free_index) begin
                     if(reservation_station[lsu_i][`RS_QJ]==lsu2rs_bypass_reorder) begin
                         reservation_station[lsu_i][`RS_VJ]<=lsu2rs_bypass_value;
                         reservation_station[lsu_i][`RS_READY_1]<=`TRUE;

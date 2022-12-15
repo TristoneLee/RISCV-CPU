@@ -3,6 +3,9 @@
 `define FALSE 1'b0
 `define TRUE 1'b1
 
+`define MEM_READ 1'b1
+`define MEM_WRITE 1'b0
+
 `define ADDR_WIDTH 31:0
 `define MEM_WIDTH 7:0
 `define INS_WIDTH 31:0
@@ -13,22 +16,24 @@
 `define REG_WIDTH 4:0
 `define ROB_WIDTH 3:0
 `define RS_WIDTH 3:0
+`define LSU_WIDTH 3:0
 `define INS_TYPE_WIDTH 5:0
 
 `define ADDR_LENGTH 32
 
-
 `define ROB_SIZE 16
 `define RS_SIZE 16
 `define REG_SIZE 32
+`define LSU_SZIE 16
 
-`define ROB_LINE_LENGTH 77
+`define ROB_LINE_LENGTH 109
 `define ROB_BUSY 0
 `define ROB_READY 1
 `define ROB_TYPE 7:2
 `define ROB_PC 39:8
 `define ROB_DEST 44:40
 `define ROB_VALUE 76:45
+`define ROB_JUMP 108:77
 
 `define RS_LINE_LENGTH 149 
 `define RS_BUSY 0
@@ -37,7 +42,7 @@
 `define RS_VK 70:39
 `define RS_QJ 74:71
 `define RS_QK 78:75
-`define RS_DEST 82:79
+`define RS_REORDER 82:79
 `define RS_A 114:83
 `define RS_READY_1 115
 `define RS_READY_2 116
@@ -50,12 +55,21 @@
 `define INS_RS2 24:20
 `define INS_FUNCT7 31:25
 
-`define ZERO_DATA 32'b0
-`define ZERO_ADDR 32'b0
-`define ZERO_REG 5'b0
-`define ZERO_RS  4'b0
-`define ZERO_LSB 4'b0
-`define ZERO_ROB 4'b0
+`define MEM_COMMAND_WIDTH 18:17
+`define MEM_COMMAND_ADDR 16:0
+`define MEM_COMMAND_SRC 20
+`define MEM_COMMAND_RW 19
+`define MEM_COMMAND_SIGN 21
+`define MEM_COMMAND_LENGTH 22;
+
+`define ZERO_DATA 32'd0
+`define ZERO_ADDR 32'd0
+`define ZERO_REG 5'd0
+`define ZERO_RS  4'd0
+`define ZERO_LSB 4'd0
+`define ZERO_ROB 4'd0
+`define ZERO_MEM_COMMAND 22'd0
+`define ZERO_BYTE 8'd0
 
 
 `define LUI 6'd0
@@ -100,6 +114,12 @@
 `define SRA 6'd34
 `define OR 6'd35
 `define AND 6'd36
+
+`define S_TYPE 7'b0100011
+`define L_TYPE 7'b0000011
+`define I_TYPE 7'b0010011
+`define R_TYPE 7'b0110011
+`define LUI
 
 `define NOP 6'd37
 

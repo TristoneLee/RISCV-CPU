@@ -16,7 +16,11 @@ module ALU(
            output wire alu2rob_enable,
            output wire[`ROB_WIDTH] alu2rob_reorder,
            output wire[`DATA_WIDTH] alu2rob_value,
-           output wire[`ADDR_WIDTH] alu2rob_pc
+           output wire[`ADDR_WIDTH] alu2rob_pc,
+
+           output wire alu2lsu_bypass_enable,
+           output wire [`ROB_WIDTH] alu2lsu_bypass_reorder,
+           output wire [`DATA_WIDTH] alu2lsu_bypass_value,
        );
 
 reg[`DATA_WIDTH] result;
@@ -29,6 +33,9 @@ assign alu2rob_reorder=rs2alu_reorder;
 assign alu2rob_value=result;
 assign alu2rs_bypass_value=result;
 assign alu2rob_pc=pc;
+assign alu2lsu_bypass_enable=rs2alu_enable;
+assign alu2lsu_bypass_reorder=rs2alu_reorder;
+assign alu2lsu_bypass_value=result;
 
 always @(*) begin
     if(rs2alu_enable) begin
@@ -98,55 +105,55 @@ always @(*) begin
                 result<=rs2alu_rs1&rs2alu_imm;
                 pc<=`ZERO_ADDR;
             end
-            `SLLI:begin
-              result<=rs2alu_rs1<<rs2alu_imm;
+            `SLLI: begin
+                result<=rs2alu_rs1<<rs2alu_imm;
                 pc<=`ZERO_ADDR;
             end
-            `SRLI:begin
-              result<=rs2alu_rs1>>rs2alu_imm;
+            `SRLI: begin
+                result<=rs2alu_rs1>>rs2alu_imm;
                 pc<=`ZERO_ADDR;
             end
-            `SRAI:begin
-              result<=rs2alu_rs1>>>rs2alu_imm;
+            `SRAI: begin
+                result<=rs2alu_rs1>>>rs2alu_imm;
                 pc<=`ZERO_ADDR;
             end
-            `ADD:begin
-              result<=rs2alu_rs1+rs2alu_rs2;
+            `ADD: begin
+                result<=rs2alu_rs1+rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `SUB:begin
+            `SUB: begin
                 result<=rs2alu_rs1-rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `SLL:begin
+            `SLL: begin
                 result<=rs2alu_rs1<<rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `SLT:begin
+            `SLT: begin
                 result<=$signed(rs2alu_rs1)<$signed(rs2alu_rs2);
                 pc<=`ZERO_ADDR;
             end
-            `SLTU:begin
+            `SLTU: begin
                 result<=rs2alu_rs1<rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `XOR:begin
+            `XOR: begin
                 result<=rs2alu_rs1^rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `SRL:begin
-              result<=rs2alu_rs1>>rs2alu_rs2;
+            `SRL: begin
+                result<=rs2alu_rs1>>rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `SRA:begin
+            `SRA: begin
                 result<=rs2alu_rs1>>>rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `OR:begin
+            `OR: begin
                 result<=rs2alu_rs1|rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
-            `AND:begin
+            `AND: begin
                 result<=rs2alu_rs1&rs2alu_rs2;
                 pc<=`ZERO_ADDR;
             end
